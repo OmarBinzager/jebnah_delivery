@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:jebnah_delivery/utill/dimensions.dart';
+import 'package:jebnah_delivery/utill/styles.dart';
+
+class CustomAppBarWidget extends StatelessWidget
+    implements PreferredSizeWidget {
+  final String? title;
+  final bool isBackButtonExist;
+  const CustomAppBarWidget({
+    super.key,
+    required this.title,
+    this.isBackButtonExist = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text(
+        title!,
+        style: rubikMedium.copyWith(
+          fontSize: Dimensions.fontSizeLarge,
+          color: Theme.of(context).textTheme.bodyLarge!.color,
+        ),
+      ),
+      centerTitle: true,
+      leading: isBackButtonExist
+          ? IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+              onPressed: () => Navigator.pop(context),
+            )
+          : const SizedBox(),
+      backgroundColor: Theme.of(context).cardColor,
+      elevation: 1,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size(double.maxFinite, 50);
+}
