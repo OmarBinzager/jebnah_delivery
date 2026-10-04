@@ -35,17 +35,12 @@ Future<void> main() async {
 
   stopService();
 
-  if (Platform.isIOS) {
-    await Firebase.initializeApp();
-  } else {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCDmxgOAjPs4xSEEgaVIDCd_FXCQyFWg-s', //current_key
-        appId: '1:1090280767907:web:8703626713a04f7b139a16', // mobilesdk_app_id
-        messagingSenderId: '1090280767907', // project_number
-        projectId: 'jebnah', // project_id
-      ),
-    );
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
+  } catch (e) {
+    debugPrint('Firebase initialization error: $e');
   }
 
   await di.init();

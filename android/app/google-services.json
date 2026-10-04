@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1090280767907",
-    "project_id": "jebnah",
-    "storage_bucket": "jebnah.firebasestorage.app"
+    "project_number": "1015861605608",
+    "project_id": "jebnah-d70fd",
+    "storage_bucket": "jebnah-d70fd.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1090280767907:android:8703626713a04f7b139a16",
+        "mobilesdk_app_id": "1:1015861605608:android:f87605f2bf7bd5c5ab855d",
         "android_client_info": {
           "package_name": "com.canaryweb.jebnah_delivery"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCDmxgOAjPs4xSEEgaVIDCd_FXCQyFWg-s"
+          "current_key": "AIzaSyAgrZZp4KRLTEnmQO9IdKYiuqRTKaaEau0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015861605608:android:1cdc162ea8f250c7ab855d",
+        "android_client_info": {
+          "package_name": "com.canarywebs.jebnah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgrZZp4KRLTEnmQO9IdKYiuqRTKaaEau0"
         }
       ],
       "services": {
