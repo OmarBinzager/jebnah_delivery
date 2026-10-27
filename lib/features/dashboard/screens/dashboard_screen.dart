@@ -15,6 +15,8 @@ import 'package:jebnah_delivery/helper/notification_helper.dart';
 import 'package:jebnah_delivery/localization/language_constrants.dart';
 import 'package:jebnah_delivery/features/home/screens/home_screen.dart';
 import 'package:jebnah_delivery/features/order/screens/order_history_screen.dart';
+import 'package:jebnah_delivery/features/wallet/screens/delivery_wallet_screen.dart';
+import 'package:jebnah_delivery/features/wallet/providers/delivery_wallet_provider.dart';
 import 'package:jebnah_delivery/features/profile/screens/profile_screen.dart';
 import 'package:jebnah_delivery/main.dart';
 import 'package:jebnah_delivery/utill/dimensions.dart';
@@ -40,8 +42,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     Provider.of<OrderProvider>(context, listen: false).getAllOrders();
     Provider.of<ProfileProvider>(context, listen: false).getUserInfo(context);
+    Provider.of<DeliveryWalletProvider>(context, listen: false).getWallet();
 
-    _screens = [HomeScreen(), OrderHistoryScreen(), const ProfileScreen()];
+    _screens = [
+      HomeScreen(),
+      OrderHistoryScreen(),
+      const DeliveryWalletScreen(),
+      const ProfileScreen(),
+    ];
 
     _listener = AppLifecycleListener(
       onPause: () async {
@@ -165,7 +173,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           items: [
             _barItem(Icons.home, getTranslated('home', context), 0),
             _barItem(Icons.history, getTranslated('order_history', context), 1),
-            _barItem(Icons.person, getTranslated('profile', context), 2),
+            _barItem(
+              Icons.account_balance_wallet_outlined,
+              getTranslated('delivery_wallet_title', context),
+              2,
+            ),
+            _barItem(Icons.person, getTranslated('profile', context), 3),
           ],
           onTap: (int index) {
             _setPage(index);

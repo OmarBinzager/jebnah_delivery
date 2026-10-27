@@ -4,6 +4,7 @@ import 'package:jebnah_delivery/features/chat/domain/reposotories/chat_repo.dart
 import 'package:jebnah_delivery/features/language/domain/reposotories/language_repo.dart';
 import 'package:jebnah_delivery/features/order/domain/reposotories/order_repo.dart';
 import 'package:jebnah_delivery/features/profile/domain/reposotories/profile_repo.dart';
+import 'package:jebnah_delivery/features/wallet/domain/reposotories/delivery_wallet_repo.dart';
 import 'package:jebnah_delivery/features/splash/domain/reposotories/splash_repo.dart';
 import 'package:jebnah_delivery/common/reposotories/tracker_repo.dart';
 import 'package:jebnah_delivery/features/auth/providers/auth_provider.dart';
@@ -12,6 +13,7 @@ import 'package:jebnah_delivery/features/language/providers/localization_provide
 import 'package:jebnah_delivery/features/language/providers/language_provider.dart';
 import 'package:jebnah_delivery/features/order/providers/order_provider.dart';
 import 'package:jebnah_delivery/features/profile/providers/profile_provider.dart';
+import 'package:jebnah_delivery/features/wallet/providers/delivery_wallet_provider.dart';
 import 'package:jebnah_delivery/features/splash/providers/splash_provider.dart';
 import 'package:jebnah_delivery/common/providers/theme_provider.dart';
 import 'package:jebnah_delivery/common/providers/tracker_provider.dart';
@@ -49,6 +51,9 @@ Future<void> init() async {
     () => ProfileRepo(dioClient: sl(), sharedPreferences: sl()),
   );
   sl.registerLazySingleton(
+    () => DeliveryWalletRepo(dioClient: sl(), sharedPreferences: sl()),
+  );
+  sl.registerLazySingleton(
     () => OrderRepo(dioClient: sl(), sharedPreferences: sl()),
   );
   sl.registerLazySingleton(
@@ -67,6 +72,7 @@ Future<void> init() async {
   sl.registerFactory(() => LanguageProvider(languageRepo: sl()));
   sl.registerFactory(() => AuthProvider(authRepo: sl()));
   sl.registerFactory(() => ProfileProvider(profileRepo: sl()));
+  sl.registerFactory(() => DeliveryWalletProvider(walletRepo: sl()));
   sl.registerFactory(() => OrderProvider(orderRepo: sl()));
   sl.registerFactory(() => TrackerProvider(trackerRepo: sl()));
   sl.registerFactory(() => ChatProvider(chatRepo: sl()));

@@ -6,6 +6,8 @@ import 'package:jebnah_delivery/features/home/widgets/order_widget.dart';
 import 'package:jebnah_delivery/features/language/screens/choose_language_screen.dart';
 import 'package:jebnah_delivery/features/order/providers/order_provider.dart';
 import 'package:jebnah_delivery/features/profile/providers/profile_provider.dart';
+import 'package:jebnah_delivery/features/wallet/providers/delivery_wallet_provider.dart';
+import 'package:jebnah_delivery/features/wallet/screens/delivery_wallet_screen.dart';
 import 'package:jebnah_delivery/features/splash/providers/splash_provider.dart';
 import 'package:jebnah_delivery/helper/location_helper.dart';
 import 'package:jebnah_delivery/localization/language_constrants.dart';
@@ -37,6 +39,9 @@ class HomeScreen extends StatelessWidget {
               children: [
                 // شريط إشعارات الأذونات
                 _buildPermissionWarning(context),
+
+                // بطاقة العهدة النقدية
+                _buildCustodyBanner(context),
 
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -393,6 +398,103 @@ class HomeScreen extends StatelessWidget {
         }
       }
     }
+  }
+
+  // ==================== شريط العهدة النقدية ====================
+  Widget _buildCustodyBanner(BuildContext context) {
+    return Consumer<DeliveryWalletProvider>(
+      builder: (context, walletProvider, _) {
+        final cash = walletProvider.walletModel?.cashInHand ?? 0.0;
+        if (cash <= 0) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.paddingSizeDefault,
+            vertical: 4,
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const DeliveryWalletScreen(),
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFFCA5A5)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.red.withOpacity(0.06),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFEE2E2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.account_balance_wallet_outlined,
+                      color: Color(0xFFDC2626),
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          getTranslated('cash_in_hand_title', context),
+                          style: rubikRegular.copyWith(
+                            color: const Color(0xFF991B1B),
+                            fontSize: Dimensions.fontSizeExtraSmall,
+                          ),
+                        ),
+                        Text(
+                          '${cash.toStringAsFixed(2)} ${getTranslated('currency', context)}',
+                          style: rubikBold.copyWith(
+                            color: const Color(0xFFDC2626),
+                            fontSize: Dimensions.fontSizeDefault,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        getTranslated('delivery_wallet_title', context),
+                        style: rubikMedium.copyWith(
+                          color: const Color(0xFFDC2626),
+                          fontSize: Dimensions.fontSizeSmall,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Color(0xFFDC2626),
+                        size: 12,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   // ==================== عنوان الطلبات النشطة ====================

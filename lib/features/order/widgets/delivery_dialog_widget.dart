@@ -11,6 +11,7 @@ import 'package:jebnah_delivery/utill/images.dart';
 import 'package:jebnah_delivery/utill/styles.dart';
 import 'package:jebnah_delivery/common/widgets/custom_button_widget.dart';
 import 'package:jebnah_delivery/features/order/screens/order_delivered_screen.dart';
+import 'package:jebnah_delivery/features/wallet/providers/delivery_wallet_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryDialogWidget extends StatelessWidget {
@@ -60,6 +61,20 @@ class DeliveryDialogWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (orderModel?.currencyCode != null &&
+                    orderModel?.currencyAmount != null &&
+                    orderModel?.currencyCode != 'YER') ...[
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Text(
+                      '(${orderModel!.currencyAmount!.toStringAsFixed(2)} ${orderModel!.currencyCode})',
+                      style: rubikMedium.copyWith(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        fontSize: Dimensions.fontSizeLarge,
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -113,6 +128,10 @@ class DeliveryDialogWidget extends StatelessWidget {
                                         orderId: orderModel!.id,
                                         status: 'paid',
                                       );
+                                      Provider.of<DeliveryWalletProvider>(
+                                        Get.context!,
+                                        listen: false,
+                                      ).getWallet(reload: true);
                                       Provider.of<OrderProvider>(
                                         Get.context!,
                                         listen: false,

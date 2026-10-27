@@ -12,6 +12,7 @@ import 'package:jebnah_delivery/utill/images.dart';
 import 'package:jebnah_delivery/utill/styles.dart';
 import 'package:jebnah_delivery/features/auth/screens/login_screen.dart';
 import 'package:jebnah_delivery/features/html/screens/html_viewer_screen.dart';
+import 'package:jebnah_delivery/features/wallet/screens/delivery_wallet_screen.dart';
 import 'package:jebnah_delivery/common/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -146,6 +147,23 @@ class ProfileScreen extends StatelessWidget {
     ThemeProvider themeProvider,
   ) {
     return [
+      // Custody Wallet Card
+      SettingCardModel(
+        icon: Icons.account_balance_wallet_outlined,
+        title: getTranslated('my_custody_wallet', context),
+        hasToggle: false,
+        toggleValue: null,
+        onToggle: null,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const DeliveryWalletScreen(),
+            ),
+          );
+        },
+      ),
+
       // Dark Mode Card
       SettingCardModel(
         icon: Icons.dark_mode,

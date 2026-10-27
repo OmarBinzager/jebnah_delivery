@@ -31,6 +31,9 @@ class OrderModel {
   List<OrderImage>? _orderImageList;
   bool? _isGuestOrder;
   double? _bringChangeAmount;
+  String? _currencyCode;
+  double? _currencyExchangeRate;
+  double? _currencyAmount;
 
 
 
@@ -65,6 +68,9 @@ class OrderModel {
         List<OrderImage>? orderImageList,
         bool? isGuestOrder,
         double? bringChangeAmount,
+        String? currencyCode,
+        double? currencyExchangeRate,
+        double? currencyAmount,
 
       }) {
     _id = id;
@@ -97,6 +103,9 @@ class OrderModel {
     _orderImageList = orderImageList;
     _isGuestOrder = isGuestOrder;
     _bringChangeAmount = bringChangeAmount;
+    _currencyCode = currencyCode;
+    _currencyExchangeRate = currencyExchangeRate;
+    _currencyAmount = currencyAmount;
 
   }
 
@@ -132,6 +141,9 @@ class OrderModel {
   List<OrderImage>? get orderImageList => _orderImageList;
   bool? get isGuestOrder => _isGuestOrder;
   double? get bringChangeAmount => _bringChangeAmount;
+  String? get currencyCode => _currencyCode;
+  double? get currencyExchangeRate => _currencyExchangeRate;
+  double? get currencyAmount => _currencyAmount;
 
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -169,6 +181,13 @@ class OrderModel {
     _orderImageList = json["order_image"] == null ? [] : List<OrderImage>.from(json["order_image"]!.map((x) => OrderImage.fromMap(x)));
     _isGuestOrder = '${json['is_guest']}'.contains('1');
     _bringChangeAmount = double.tryParse('${json['bring_change_amount']}');
+    _currencyCode = json['currency_code'];
+    _currencyExchangeRate = json['currency_exchange_rate'] != null
+        ? double.tryParse(json['currency_exchange_rate'].toString())
+        : null;
+    _currencyAmount = json['currency_amount'] != null
+        ? double.tryParse(json['currency_amount'].toString())
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -204,6 +223,9 @@ class OrderModel {
     }
     data['extra_discount'] = _extraDiscount;
     data['bring_change_amount'] = _bringChangeAmount;
+    data['currency_code'] = _currencyCode;
+    data['currency_exchange_rate'] = _currencyExchangeRate;
+    data['currency_amount'] = _currencyAmount;
     return data;
   }
 }

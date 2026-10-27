@@ -934,6 +934,30 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 ),
                               ],
                             ),
+                            if (orderProvider.currentOrderModel?.currencyCode != null &&
+                                orderProvider.currentOrderModel?.currencyAmount != null &&
+                                orderProvider.currentOrderModel?.currencyCode != 'YER') ...[
+                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '(${orderProvider.currentOrderModel!.currencyCode})',
+                                    style: rubikRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeSmall,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${orderProvider.currentOrderModel!.currencyAmount!.toStringAsFixed(2)} ${orderProvider.currentOrderModel!.currencyCode}',
+                                    style: rubikMedium.copyWith(
+                                      fontSize: Dimensions.fontSizeLarge,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                             const SizedBox(
                               height: Dimensions.paddingSizeDefault,
                             ),

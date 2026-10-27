@@ -34,6 +34,10 @@ class AppConstants {
   static const String changeLanguage = '/api/v1/delivery-man/change-language';
   static const String ordersCountUri =
       '/api/v1/delivery-man/orders-count?token=';
+  static const String deliveryWalletUri =
+      '/api/v1/delivery-man/wallet?token=';
+  static const String deliveryWalletTransactionsUri =
+      '/api/v1/delivery-man/wallet/transactions?token=';
   static const String accountPermanentDelete =
       '/api/v1/delivery-man/delete-account?token=';
 

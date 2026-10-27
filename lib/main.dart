@@ -16,6 +16,7 @@ import 'package:jebnah_delivery/features/language/providers/localization_provide
 import 'package:jebnah_delivery/features/language/providers/language_provider.dart';
 import 'package:jebnah_delivery/features/order/providers/order_provider.dart';
 import 'package:jebnah_delivery/features/profile/providers/profile_provider.dart';
+import 'package:jebnah_delivery/features/wallet/providers/delivery_wallet_provider.dart';
 import 'package:jebnah_delivery/features/splash/providers/splash_provider.dart';
 import 'package:jebnah_delivery/common/providers/theme_provider.dart';
 import 'package:jebnah_delivery/common/providers/tracker_provider.dart';
@@ -66,6 +67,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(create: (context) => di.sl<AuthProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ProfileProvider>()),
+        ChangeNotifierProvider(
+          create: (context) => di.sl<DeliveryWalletProvider>(),
+        ),
         ChangeNotifierProvider(create: (context) => di.sl<OrderProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ChatProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<TrackerProvider>()),
