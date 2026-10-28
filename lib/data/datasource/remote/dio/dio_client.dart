@@ -35,6 +35,7 @@ class DioClient {
       ..options.headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
+        'X-localization': sharedPreferences.getString(AppConstants.languageCode) ?? 'ar',
       };
     dio!.interceptors.add(loggingInterceptor);
   }

@@ -291,8 +291,8 @@ Future<ServiceRequestResult> _startService(String? orderId) async {
   } else {
     return FlutterForegroundTask.startService(
       serviceId: 256,
-      notificationTitle: 'You got a new order ($orderId)',
-      notificationText: 'Open app and check order details.',
+      notificationTitle: 'لديك طلب جديد ($orderId)',
+      notificationText: 'افتح التطبيق واطلع على تفاصيل الطلب.',
       callback: startCallback,
     );
   }
@@ -303,9 +303,9 @@ void _initService() {
   FlutterForegroundTask.init(
     androidNotificationOptions: AndroidNotificationOptions(
       channelId: 'eFood',
-      channelName: 'Foreground Service Notification',
+      channelName: 'إشعارات خدمة التطبيق',
       channelDescription:
-          'This notification appears when the foreground service is running.',
+          'يظهر هذا الإشعار عندما تعمل خدمة التطبيق في الخلفية.',
       onlyAlertOnce: false,
     ),
     iosNotificationOptions: const IOSNotificationOptions(
@@ -408,8 +408,8 @@ class MyTaskHandler extends TaskHandler {
   @override
   void onNotificationDismissed() {
     FlutterForegroundTask.updateService(
-      notificationTitle: 'You got a new order!',
-      notificationText: 'Open app and check order details.',
+      notificationTitle: 'لديك طلب جديد!',
+      notificationText: 'افتح التطبيق واطلع على تفاصيل الطلب.',
     );
   }
 }

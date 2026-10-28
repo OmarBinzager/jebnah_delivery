@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:jebnah_delivery/features/language/providers/localization_provider.dart';
+import 'package:jebnah_delivery/localization/language_constrants.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:vibration/vibration.dart';
@@ -129,7 +130,7 @@ class _SliderButtonWidgetState extends State<SliderButtonWidget> {
         if (widget.disable)
           Tooltip(
             verticalOffset: 50,
-            message: 'Button is disabled',
+            message: getTranslated('button_is_disabled', context),
             child: Container(
               width: widget.width - (widget.height),
               height: widget.height,
