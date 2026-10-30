@@ -146,6 +146,26 @@ class CustodyTransactionWidget extends StatelessWidget {
                         ],
                       ),
                     ] else if (!isCollection) ...[
+                      if (transaction.adminName != null && transaction.adminName!.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Icon(Icons.badge_outlined, size: 14, color: Theme.of(context).primaryColor),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                '${getTranslated('receiving_accountant', context)}: ${transaction.adminName}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: rubikMedium.copyWith(
+                                  fontSize: Dimensions.fontSizeSmall,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                      ],
                       Row(
                         children: [
                           Icon(Icons.verified_user_outlined, size: 14, color: Theme.of(context).hintColor),

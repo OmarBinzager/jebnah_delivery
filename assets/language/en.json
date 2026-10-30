@@ -289,5 +289,9 @@
     "retry": "Retry",
     "something_went_wrong": "Something went wrong, please try again",
     "connection_timeout": "Connection timeout",
-    "no_internet_connection": "No internet connection"
+    "no_internet_connection": "No internet connection",
+    "seller": "Seller",
+    "receiving_accountant": "Receiving Accountant",
+    "expected_custody": "Expected Custody",
+    "remaining_difference": "Remaining"
 }

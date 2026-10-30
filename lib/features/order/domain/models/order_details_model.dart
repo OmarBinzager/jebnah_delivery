@@ -16,6 +16,7 @@ class OrderDetailsModel {
   String? _variant;
   bool? _isVatInclude;
   Map<String, dynamic>? _formattedVariation;
+  String? _sellerName;
 
 
   OrderDetailsModel(
@@ -67,6 +68,7 @@ class OrderDetailsModel {
   String? get variant => _variant;
   bool? get isVatInclude => _isVatInclude;
   Map<String, dynamic>? get modifiedVariation => _formattedVariation;
+  String? get sellerName => _sellerName;
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -91,12 +93,14 @@ class OrderDetailsModel {
     _variant = json['variant'];
     _isVatInclude = '${json['vat_status']}' == 'included';
     _formattedVariation = json['formatted_variation'];
+    _sellerName = json['seller_name'] ?? json['product_details']?['seller_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id;
     data['product_id'] = _productId;
+    data['seller_name'] = _sellerName;
     data['order_id'] = _orderId;
     data['price'] = _price;
     if (_productDetails != null) {

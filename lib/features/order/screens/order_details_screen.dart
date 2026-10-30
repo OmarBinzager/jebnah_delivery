@@ -607,6 +607,31 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                   ),
                                                 ],
                                               ),
+                                              if (orderProvider.orderDetails![index].sellerName != null &&
+                                                  orderProvider.orderDetails![index].sellerName!.trim().isNotEmpty) ...[
+                                                const SizedBox(height: 3.0),
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.storefront_outlined,
+                                                      size: 14,
+                                                      color: Theme.of(context).hintColor,
+                                                    ),
+                                                    const SizedBox(width: 4.0),
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${getTranslated('seller', context)}: ${orderProvider.orderDetails![index].sellerName}',
+                                                        style: rubikRegular.copyWith(
+                                                          fontSize: Dimensions.fontSizeExtraSmall,
+                                                          color: Theme.of(context).hintColor,
+                                                        ),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                               const SizedBox(
                                                 height: Dimensions
                                                     .paddingSizeExtraSmall,

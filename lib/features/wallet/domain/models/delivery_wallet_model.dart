@@ -73,6 +73,7 @@ class CustodyTransactionModel {
   String? paymentMethod;
   String? reference;
   String? notes;
+  String? adminName;
   String? createdAt;
   String? updatedAt;
 
@@ -92,6 +93,7 @@ class CustodyTransactionModel {
     this.paymentMethod,
     this.reference,
     this.notes,
+    this.adminName,
     this.createdAt,
     this.updatedAt,
   });
@@ -118,6 +120,7 @@ class CustodyTransactionModel {
     paymentMethod = json['payment_method'];
     reference = json['reference'];
     notes = json['notes'];
+    adminName = json['admin_name'] ?? (json['admin'] != null ? '${json['admin']['f_name'] ?? ''} ${json['admin']['l_name'] ?? ''}'.trim() : null);
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -139,6 +142,7 @@ class CustodyTransactionModel {
     data['payment_method'] = paymentMethod;
     data['reference'] = reference;
     data['notes'] = notes;
+    data['admin_name'] = adminName;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;

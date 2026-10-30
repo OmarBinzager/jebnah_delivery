@@ -290,5 +290,9 @@
     "retry": "إعادة المحاولة",
     "something_went_wrong": "حدث خطأ ما، يرجى المحاولة لاحقاً",
     "connection_timeout": "انتهت مهلة الاتصال",
-    "no_internet_connection": "لا يوجد اتصال بالإنترنت"
+    "no_internet_connection": "لا يوجد اتصال بالإنترنت",
+    "seller": "التاجر",
+    "receiving_accountant": "المحاسب المستلم",
+    "expected_custody": "العهدة المتوقعة",
+    "remaining_difference": "المتبقي"
 }
