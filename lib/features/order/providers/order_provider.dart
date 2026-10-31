@@ -39,7 +39,8 @@ class OrderProvider with ChangeNotifier {
 
       apiResponse.response?.data.forEach((order) {
         OrderModel orderModel = OrderModel.fromJson(order);
-        if (orderModel.orderStatus == 'processing' ||
+        if (orderModel.orderStatus == 'confirmed' ||
+            orderModel.orderStatus == 'processing' ||
             orderModel.orderStatus == 'out_for_delivery') {
           _currentOrdersReverse?.add(orderModel);
         }

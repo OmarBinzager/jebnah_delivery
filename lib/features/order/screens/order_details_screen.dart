@@ -1174,8 +1174,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           : const SizedBox(),
                       */
 
-                      orderProvider.currentOrderModel?.orderStatus ==
-                              'processing'
+                      (orderProvider.currentOrderModel?.orderStatus ==
+                                  'processing' ||
+                              orderProvider.currentOrderModel?.orderStatus ==
+                                  'confirmed')
                           ? Container(
                               height: 50,
                               width: MediaQuery.of(context).size.width,
