@@ -59,13 +59,19 @@ class OrderProvider with ChangeNotifier {
       orderID: orderID,
     );
 
-    if (apiResponse.response?.statusCode == 200) {
+    if (apiResponse.response?.statusCode == 200 && apiResponse.response?.data != null) {
       _orderDetails = [];
-      apiResponse.response!.data.forEach(
-        (orderDetail) =>
-            _orderDetails?.add(OrderDetailsModel.fromJson(orderDetail)),
-      );
+      if (apiResponse.response!.data is List) {
+        for (var orderDetail in apiResponse.response!.data) {
+          try {
+            _orderDetails?.add(OrderDetailsModel.fromJson(orderDetail));
+          } catch (e) {
+            debugPrint('Error parsing orderDetail: $e');
+          }
+        }
+      }
     } else {
+      _orderDetails = [];
       ApiCheckerHelper.checkApi(apiResponse);
     }
 

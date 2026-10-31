@@ -40,9 +40,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<OrderProvider>(context, listen: false).getAllOrders();
-    Provider.of<ProfileProvider>(context, listen: false).getUserInfo(context);
-    Provider.of<DeliveryWalletProvider>(context, listen: false).getWallet();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Provider.of<OrderProvider>(context, listen: false).getAllOrders();
+      Provider.of<ProfileProvider>(context, listen: false).getUserInfo(context);
+      Provider.of<DeliveryWalletProvider>(context, listen: false).getWallet();
+    });
 
     _screens = [
       HomeScreen(),
@@ -67,6 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onResume: () async {
         debugPrint('---(state)---on onResume------');
         LocationPermission permission = await Geolocator.checkPermission();
+        if (!mounted) return;
         Provider.of<PermissionHandlerProvider>(
           context,
           listen: false,

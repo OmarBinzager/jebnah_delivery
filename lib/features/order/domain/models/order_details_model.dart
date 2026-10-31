@@ -71,29 +71,41 @@ class OrderDetailsModel {
   String? get sellerName => _sellerName;
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _productId = json['product_id'];
-    _orderId = json['order_id'];
-    _price = json['price'].toDouble();
-    _productDetails = json['product_details'] != null
-        ? ProductDetails.fromJson(json['product_details'])
-        : null;
-    if (json['variation'] != null) {
-      _variation = [];
-      json['variation'].forEach((v) {
-        _variation!.add(Variation.fromJson(v));
-      });
+    _id = json['id'] is int ? json['id'] : int.tryParse(json['id']?.toString() ?? '');
+    _productId = json['product_id'] is int ? json['product_id'] : int.tryParse(json['product_id']?.toString() ?? '');
+    _orderId = json['order_id'] is int ? json['order_id'] : int.tryParse(json['order_id']?.toString() ?? '');
+    _price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
+    if (json['product_details'] != null && json['product_details'] is Map) {
+      try {
+        _productDetails = ProductDetails.fromJson(Map<String, dynamic>.from(json['product_details']));
+      } catch (e) {
+        debugPrint('Error parsing product_details: $e');
+      }
     }
-    _discountOnProduct = json['discount_on_product'].toDouble();
-    _discountType = json['discount_type'];
-    _quantity = json['quantity'];
-    _taxAmount = json['tax_amount'].toDouble();
-    _createdAt = json['created_at'];
-    _updatedAt = json['updated_at'];
-    _variant = json['variant'];
+    if (json['variation'] != null && json['variation'] is List) {
+      _variation = [];
+      for (var v in json['variation']) {
+        if (v != null && v is Map) {
+          try {
+            _variation!.add(Variation.fromJson(Map<String, dynamic>.from(v)));
+          } catch (e) {
+            debugPrint('Error parsing variation: $e');
+          }
+        }
+      }
+    }
+    _discountOnProduct = double.tryParse(json['discount_on_product']?.toString() ?? '') ?? 0.0;
+    _discountType = json['discount_type']?.toString();
+    _quantity = int.tryParse(json['quantity']?.toString() ?? '') ?? 1;
+    _taxAmount = double.tryParse(json['tax_amount']?.toString() ?? '') ?? 0.0;
+    _createdAt = json['created_at']?.toString();
+    _updatedAt = json['updated_at']?.toString();
+    _variant = json['variant']?.toString();
     _isVatInclude = '${json['vat_status']}' == 'included';
-    _formattedVariation = json['formatted_variation'];
-    _sellerName = json['seller_name'] ?? json['product_details']?['seller_name'];
+    if (json['formatted_variation'] is Map) {
+      _formattedVariation = Map<String, dynamic>.from(json['formatted_variation']);
+    }
+    _sellerName = json['seller_name']?.toString() ?? json['product_details']?['seller_name']?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -201,42 +213,66 @@ class ProductDetails {
   String? get taxType => _taxType;
 
   ProductDetails.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _name = json['name'];
-    _description = json['description'];
-    if(json['image'] != null) {
-      _image = json['image'].cast<String>();
+    _id = json['id'] is int ? json['id'] : int.tryParse(json['id']?.toString() ?? '');
+    _name = json['name']?.toString();
+    _description = json['description']?.toString();
+    if (json['image'] != null && json['image'] is List) {
+      _image = List<String>.from(json['image'].map((e) => e.toString()));
+    } else {
+      _image = [];
     }
 
-    _price = json['price'].toDouble();
-    if (json['variations'] != null) {
+    _price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
+    if (json['variations'] != null && json['variations'] is List) {
       _variations = [];
-      json['variations'].forEach((v) {
-        _variations!.add(Variations.fromJson(v));
-      });
+      for (var v in json['variations']) {
+        if (v != null && v is Map) {
+          try {
+            _variations!.add(Variations.fromJson(Map<String, dynamic>.from(v)));
+          } catch (e) {
+            debugPrint('Error parsing variations: $e');
+          }
+        }
+      }
     }
-    _tax = json['tax'].toDouble();
-    _availableTimeStarts = json['available_time_starts'];
-    _availableTimeEnds = json['available_time_ends'];
-    _status = json['status'];
-    _createdAt = json['created_at'];
-    _updatedAt = json['updated_at'];
-    _attributes = json['attributes'].cast<String>();
-    if (json['category_ids'] != null) {
+    _tax = double.tryParse(json['tax']?.toString() ?? '') ?? 0.0;
+    _availableTimeStarts = json['available_time_starts']?.toString();
+    _availableTimeEnds = json['available_time_ends']?.toString();
+    _status = json['status'] is int ? json['status'] : int.tryParse(json['status']?.toString() ?? '');
+    _createdAt = json['created_at']?.toString();
+    _updatedAt = json['updated_at']?.toString();
+    if (json['attributes'] != null && json['attributes'] is List) {
+      _attributes = List<String>.from(json['attributes'].map((e) => e.toString()));
+    } else {
+      _attributes = [];
+    }
+    if (json['category_ids'] != null && json['category_ids'] is List) {
       _categoryIds = [];
-      json['category_ids'].forEach((v) {
-        _categoryIds!.add(CategoryIds.fromJson(v));
-      });
+      for (var v in json['category_ids']) {
+        if (v != null && v is Map) {
+          try {
+            _categoryIds!.add(CategoryIds.fromJson(Map<String, dynamic>.from(v)));
+          } catch (e) {
+            debugPrint('Error parsing category_ids: $e');
+          }
+        }
+      }
     }
-    if (json['choice_options'] != null) {
+    if (json['choice_options'] != null && json['choice_options'] is List) {
       _choiceOptions = [];
-      json['choice_options'].forEach((v) {
-        _choiceOptions!.add(ChoiceOptions.fromJson(v));
-      });
+      for (var v in json['choice_options']) {
+        if (v != null && v is Map) {
+          try {
+            _choiceOptions!.add(ChoiceOptions.fromJson(Map<String, dynamic>.from(v)));
+          } catch (e) {
+            debugPrint('Error parsing choice_options: $e');
+          }
+        }
+      }
     }
-    _discount = json['discount'].toDouble();
-    _discountType = json['discount_type'];
-    _taxType = json['tax_type'];
+    _discount = double.tryParse(json['discount']?.toString() ?? '') ?? 0.0;
+    _discountType = json['discount_type']?.toString();
+    _taxType = json['tax_type']?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -283,8 +319,8 @@ class Variations {
   double? get price => _price;
 
   Variations.fromJson(Map<String, dynamic> json) {
-    _type = json['type'];
-    _price = json['price'].toDouble();
+    _type = json['type']?.toString();
+    _price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
   }
 
   Map<String, dynamic> toJson() {
@@ -308,8 +344,8 @@ class CategoryIds {
   int? get position => _position;
 
   CategoryIds.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _position = json['position'];
+    _id = json['id']?.toString();
+    _position = json['position'] is int ? json['position'] : int.tryParse(json['position']?.toString() ?? '');
   }
 
   Map<String, dynamic> toJson() {
@@ -336,9 +372,13 @@ class ChoiceOptions {
   List<String>? get options => _options;
 
   ChoiceOptions.fromJson(Map<String, dynamic> json) {
-    _name = json['name'];
-    _title = json['title'];
-    _options = json['options'].cast<String>();
+    _name = json['name']?.toString();
+    _title = json['title']?.toString();
+    if (json['options'] != null && json['options'] is List) {
+      _options = List<String>.from(json['options'].map((e) => e.toString()));
+    } else {
+      _options = [];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -363,16 +403,16 @@ class Variation {
   double? get price => _price;
 
   Variation.fromJson(Map<String, dynamic> json) {
-    _type = json['type'];
-    try{
-      _type = json.values.first;
-    }catch(error){
-      _type = json['type'];
+    _type = json['type']?.toString();
+    try {
+      if (json.values.isNotEmpty) {
+        _type = json.values.first?.toString();
+      }
+    } catch (error) {
+      _type = json['type']?.toString();
       debugPrint('variation error --> $error');
     }
-    if(json['price'] != null) {
-      _price = json['price'].toDouble();
-    }
+    _price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
   }
 
   Map<String, dynamic> toJson() {

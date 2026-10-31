@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:jebnah_delivery/common/models/api_response_model.dart';
 import 'package:jebnah_delivery/features/wallet/domain/models/delivery_wallet_model.dart';
 import 'package:jebnah_delivery/features/wallet/domain/reposotories/delivery_wallet_repo.dart';
@@ -8,6 +9,29 @@ class DeliveryWalletProvider extends ChangeNotifier {
   final DeliveryWalletRepo walletRepo;
 
   DeliveryWalletProvider({required this.walletRepo});
+
+  bool _disposed = false;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    if (WidgetsBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks ||
+        WidgetsBinding.instance.schedulerPhase == SchedulerPhase.midFrameMicrotasks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!_disposed) {
+          super.notifyListeners();
+        }
+      });
+    } else {
+      super.notifyListeners();
+    }
+  }
 
   DeliveryWalletModel? _walletModel;
   DeliveryWalletModel? get walletModel => _walletModel;
