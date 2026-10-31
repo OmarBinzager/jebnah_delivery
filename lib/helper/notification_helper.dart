@@ -22,7 +22,7 @@ class NotificationHelper {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
   ) async {
     var androidInitialize = const AndroidInitializationSettings(
-      'notification_icon',
+      '@mipmap/launcher_icon',
     );
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationsSettings = InitializationSettings(
@@ -171,34 +171,40 @@ class NotificationHelper {
     String orderID,
     FlutterLocalNotificationsPlugin fln,
   ) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          playSound: true,
-          importance: Importance.max,
-          priority: Priority.max,
-          sound: RawResourceAndroidNotificationSound('notification'),
-        );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
     try {
-      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
-    } catch (e) {
-      debugPrint('Error showing notification with custom sound, falling back: $e');
-      const fallbackSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          playSound: true,
-          importance: Importance.max,
-          priority: Priority.max,
-        ),
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            playSound: true,
+            importance: Importance.max,
+            priority: Priority.max,
+            sound: RawResourceAndroidNotificationSound('notification'),
+          );
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
       );
-      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      try {
+        await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+      } catch (e) {
+        debugPrint('Error showing notification with custom sound, falling back: $e');
+        const fallbackSpecifics = NotificationDetails(
+          android: AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            playSound: true,
+            importance: Importance.max,
+            priority: Priority.max,
+          ),
+        );
+        await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      }
+    } catch (e) {
+      debugPrint('Failed to show text notification: $e');
     }
   }
 
@@ -208,42 +214,48 @@ class NotificationHelper {
     String? orderID,
     FlutterLocalNotificationsPlugin fln,
   ) async {
-    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-      body,
-      htmlFormatBigText: true,
-      contentTitle: title,
-      htmlFormatContentTitle: true,
-    );
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          importance: Importance.max,
-          styleInformation: bigTextStyleInformation,
-          priority: Priority.max,
-          playSound: true,
-          sound: const RawResourceAndroidNotificationSound('notification'),
-        );
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
     try {
-      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
-    } catch (e) {
-      debugPrint('Error showing big text notification with custom sound, falling back: $e');
-      final fallbackSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          importance: Importance.max,
-          styleInformation: bigTextStyleInformation,
-          priority: Priority.max,
-          playSound: true,
-        ),
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        body,
+        htmlFormatBigText: true,
+        contentTitle: title,
+        htmlFormatContentTitle: true,
       );
-      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            importance: Importance.max,
+            styleInformation: bigTextStyleInformation,
+            priority: Priority.max,
+            playSound: true,
+            sound: const RawResourceAndroidNotificationSound('notification'),
+          );
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+      );
+      try {
+        await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+      } catch (e) {
+        debugPrint('Error showing big text notification with custom sound, falling back: $e');
+        final fallbackSpecifics = NotificationDetails(
+          android: AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            importance: Importance.max,
+            styleInformation: bigTextStyleInformation,
+            priority: Priority.max,
+            playSound: true,
+          ),
+        );
+        await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      }
+    } catch (e) {
+      debugPrint('Failed to show big text notification: $e');
     }
   }
 
@@ -254,52 +266,58 @@ class NotificationHelper {
     String image,
     FlutterLocalNotificationsPlugin fln,
   ) async {
-    final String largeIconPath = await _downloadAndSaveFile(image, 'largeIcon');
-    final String bigPicturePath = await _downloadAndSaveFile(
-      image,
-      'bigPicture',
-    );
-    final BigPictureStyleInformation bigPictureStyleInformation =
-        BigPictureStyleInformation(
-          FilePathAndroidBitmap(bigPicturePath),
-          hideExpandedLargeIcon: true,
-          contentTitle: title,
-          htmlFormatContentTitle: true,
-          summaryText: body,
-          htmlFormatSummaryText: true,
-        );
-    final AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          largeIcon: FilePathAndroidBitmap(largeIconPath),
-          priority: Priority.max,
-          playSound: true,
-          styleInformation: bigPictureStyleInformation,
-          importance: Importance.max,
-          sound: const RawResourceAndroidNotificationSound('notification'),
-        );
-    final NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
     try {
-      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
-    } catch (e) {
-      debugPrint('Error showing big picture notification with custom sound, falling back: $e');
-      final fallbackSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails(
-          AppConstants.appName,
-          AppConstants.appName,
-          channelDescription: AppConstants.appName,
-          largeIcon: FilePathAndroidBitmap(largeIconPath),
-          priority: Priority.max,
-          playSound: true,
-          styleInformation: bigPictureStyleInformation,
-          importance: Importance.max,
-        ),
+      final String largeIconPath = await _downloadAndSaveFile(image, 'largeIcon');
+      final String bigPicturePath = await _downloadAndSaveFile(
+        image,
+        'bigPicture',
       );
-      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      final BigPictureStyleInformation bigPictureStyleInformation =
+          BigPictureStyleInformation(
+            FilePathAndroidBitmap(bigPicturePath),
+            hideExpandedLargeIcon: true,
+            contentTitle: title,
+            htmlFormatContentTitle: true,
+            summaryText: body,
+            htmlFormatSummaryText: true,
+          );
+      final AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            largeIcon: FilePathAndroidBitmap(largeIconPath),
+            priority: Priority.max,
+            playSound: true,
+            styleInformation: bigPictureStyleInformation,
+            importance: Importance.max,
+            sound: const RawResourceAndroidNotificationSound('notification'),
+          );
+      final NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+      );
+      try {
+        await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+      } catch (e) {
+        debugPrint('Error showing big picture notification with custom sound, falling back: $e');
+        final fallbackSpecifics = NotificationDetails(
+          android: AndroidNotificationDetails(
+            AppConstants.appName,
+            AppConstants.appName,
+            channelDescription: AppConstants.appName,
+            icon: '@mipmap/launcher_icon',
+            largeIcon: FilePathAndroidBitmap(largeIconPath),
+            priority: Priority.max,
+            playSound: true,
+            styleInformation: bigPictureStyleInformation,
+            importance: Importance.max,
+          ),
+        );
+        await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+      }
+    } catch (e) {
+      debugPrint('Failed to show big picture notification: $e');
     }
   }
 
