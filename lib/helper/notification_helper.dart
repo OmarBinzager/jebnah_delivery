@@ -184,7 +184,22 @@ class NotificationHelper {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
     );
-    await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    try {
+      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    } catch (e) {
+      debugPrint('Error showing notification with custom sound, falling back: $e');
+      const fallbackSpecifics = NotificationDetails(
+        android: AndroidNotificationDetails(
+          AppConstants.appName,
+          AppConstants.appName,
+          channelDescription: AppConstants.appName,
+          playSound: true,
+          importance: Importance.max,
+          priority: Priority.max,
+        ),
+      );
+      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+    }
   }
 
   static Future<void> showBigTextNotification(
@@ -213,7 +228,23 @@ class NotificationHelper {
     NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
     );
-    await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    try {
+      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    } catch (e) {
+      debugPrint('Error showing big text notification with custom sound, falling back: $e');
+      final fallbackSpecifics = NotificationDetails(
+        android: AndroidNotificationDetails(
+          AppConstants.appName,
+          AppConstants.appName,
+          channelDescription: AppConstants.appName,
+          importance: Importance.max,
+          styleInformation: bigTextStyleInformation,
+          priority: Priority.max,
+          playSound: true,
+        ),
+      );
+      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+    }
   }
 
   static Future<void> showBigPictureNotificationHiddenLargeIcon(
@@ -252,7 +283,24 @@ class NotificationHelper {
     final NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
     );
-    await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    try {
+      await fln.show(0, title, body, platformChannelSpecifics, payload: orderID);
+    } catch (e) {
+      debugPrint('Error showing big picture notification with custom sound, falling back: $e');
+      final fallbackSpecifics = NotificationDetails(
+        android: AndroidNotificationDetails(
+          AppConstants.appName,
+          AppConstants.appName,
+          channelDescription: AppConstants.appName,
+          largeIcon: FilePathAndroidBitmap(largeIconPath),
+          priority: Priority.max,
+          playSound: true,
+          styleInformation: bigPictureStyleInformation,
+          importance: Importance.max,
+        ),
+      );
+      await fln.show(0, title, body, fallbackSpecifics, payload: orderID);
+    }
   }
 
   static Future<String> _downloadAndSaveFile(
