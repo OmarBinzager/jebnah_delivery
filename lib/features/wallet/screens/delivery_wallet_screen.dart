@@ -8,7 +8,12 @@ import 'package:jebnah_delivery/utill/styles.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryWalletScreen extends StatefulWidget {
-  const DeliveryWalletScreen({super.key});
+  final bool isBackButtonExist;
+
+  const DeliveryWalletScreen({
+    super.key,
+    this.isBackButtonExist = true,
+  });
 
   @override
   State<DeliveryWalletScreen> createState() => _DeliveryWalletScreenState();
@@ -27,7 +32,8 @@ class _DeliveryWalletScreenState extends State<DeliveryWalletScreen> {
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.hasClients &&
+          _scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         Provider.of<DeliveryWalletProvider>(context, listen: false).loadMoreTransactions();
       }
     });
@@ -44,12 +50,23 @@ class _DeliveryWalletScreenState extends State<DeliveryWalletScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).cardColor,
         elevation: 0.5,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).textTheme.bodyLarge?.color, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: (widget.isBackButtonExist && Navigator.canPop(context))
+            ? IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  size: 20,
+                ),
+                onPressed: () {
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                },
+              )
+            : const SizedBox.shrink(),
         title: Text(
           getTranslated('delivery_wallet_title', context),
           style: rubikMedium.copyWith(

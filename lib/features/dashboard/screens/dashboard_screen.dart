@@ -50,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _screens = [
       HomeScreen(),
       OrderHistoryScreen(),
-      const DeliveryWalletScreen(),
+      const DeliveryWalletScreen(isBackButtonExist: false),
       const ProfileScreen(),
     ];
 
