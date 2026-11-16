@@ -9,15 +9,31 @@ class PriceConverterHelper {
     String? discount,
     String? discountType,
   }) {
+    if (price == null) return '';
+
     if (discount != null && discountType != null) {
       if (discountType == 'amount') {
-        price = price! - double.parse(discount);
+        price = price - double.parse(discount);
       } else if (discountType == 'percent') {
-        price = price! - ((double.parse(discount) / 100) * price);
+        price = price - ((double.parse(discount) / 100) * price);
       }
     }
-    return '${Provider.of<SplashProvider>(context, listen: false).configModel!.currencySymbol} '
-        '${price!.toStringAsFixed(Provider.of<SplashProvider>(context, listen: false).configModel!.decimalPointSettings!).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}';
+
+    final config = Provider.of<SplashProvider>(context, listen: false).configModel;
+    String symbol = config?.currencySymbol ?? '﷼';
+    symbol = symbol.replaceAll(RegExp(r'[\u200E\u200F\u202A-\u202E]'), '').trim();
+
+    String symbolPosition = (config?.currencySymbolPosition != null && config!.currencySymbolPosition!.trim().isNotEmpty)
+        ? config.currencySymbolPosition!.trim().toLowerCase()
+        : 'right';
+    bool isLeft = symbolPosition == 'left';
+    int decimalDigits = config?.decimalPointSettings ?? 2;
+
+    String formattedNumber = price
+        .toStringAsFixed(decimalDigits)
+        .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+
+    return isLeft ? '$symbol $formattedNumber' : '$formattedNumber $symbol';
   }
 
   static double convertWithDiscount(

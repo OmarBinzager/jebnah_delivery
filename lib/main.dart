@@ -50,7 +50,25 @@ Future<void> main() async {
     channel = const AndroidNotificationChannel(
       'high_importance_channel',
       'High Importance Notifications',
-      importance: Importance.high,
+      description: 'Notifications for order updates and assignments',
+      importance: Importance.max,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('notification'),
+      enableVibration: true,
+    );
+    final androidNotificationPlugin = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await androidNotificationPlugin?.createNotificationChannel(channel!);
+    await androidNotificationPlugin?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        'jebnah_notification_channel_v1',
+        'Jebnah Orders Channel',
+        description: 'Notifications for order updates and assignments',
+        importance: Importance.max,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('notification'),
+        enableVibration: true,
+      ),
     );
   }
   await NotificationHelper.initialize(flutterLocalNotificationsPlugin);

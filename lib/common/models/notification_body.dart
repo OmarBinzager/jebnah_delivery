@@ -14,14 +14,16 @@ class NotificationBody {
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    body = json['body'];
+    body = json['body'] ?? json['description'];
     type = json['type'];
     image = (json['image'] != null && json['image'] !="") ? json['image'] : null;
     userImage = json['user_image'] != null && json['user_image'] != "" ? json['user_image'] : null;
     userName = json['user_name'] != null && json['user_name'] != "" ? json['user_name'] : null;
     orderId = int.tryParse(json['order_id'].toString());
-    isAssignedNotification = json["is_deliveryman_assigned"] == '1';
-
+    isAssignedNotification = json["is_deliveryman_assigned"] == '1' ||
+        json["is_deliveryman_assigned"] == 1 ||
+        json["is_deliveryman_assigned"] == true ||
+        (json["type"] == 'order' && json["is_deliveryman_assigned"] != null);
   }
 
   Map<String, dynamic> toJson() {

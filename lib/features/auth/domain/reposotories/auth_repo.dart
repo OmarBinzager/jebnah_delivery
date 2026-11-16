@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -56,23 +54,21 @@ class AuthRepo {
   Future<ApiResponseModel> updateToken() async {
     try {
       String? deviceToken;
-      if (!Platform.isAndroid) {
-        NotificationSettings settings = await FirebaseMessaging.instance
-            .requestPermission(
-              alert: true,
-              announcement: false,
-              badge: true,
-              carPlay: false,
-              criticalAlert: false,
-              provisional: false,
-              sound: true,
-            );
-        if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-          deviceToken = await _saveDeviceToken();
-        }
-      } else {
-        deviceToken = await _saveDeviceToken();
+      try {
+        await FirebaseMessaging.instance.requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
+        );
+      } catch (e) {
+        debugPrint('Notification permission request error: $e');
       }
+
+      deviceToken = await _saveDeviceToken();
 
       FirebaseMessaging.instance.subscribeToTopic(AppConstants.topic);
 

@@ -8,6 +8,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jebnah_delivery/common/providers/tracker_provider.dart';
 import 'package:jebnah_delivery/common/providers/permission_handler_provider.dart';
+import 'package:jebnah_delivery/features/auth/providers/auth_provider.dart';
 import 'package:jebnah_delivery/features/order/providers/order_provider.dart';
 import 'package:jebnah_delivery/features/profile/providers/profile_provider.dart';
 import 'package:jebnah_delivery/helper/location_helper.dart';
@@ -45,6 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       Provider.of<OrderProvider>(context, listen: false).getAllOrders();
       Provider.of<ProfileProvider>(context, listen: false).getUserInfo(context);
       Provider.of<DeliveryWalletProvider>(context, listen: false).getWallet();
+      Provider.of<AuthProvider>(context, listen: false).updateToken();
     });
 
     _screens = [

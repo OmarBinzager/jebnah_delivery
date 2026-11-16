@@ -135,12 +135,12 @@ class NotificationHelper {
     bool data,
   ) async {
     String? title;
-    String? body;
+    String body;
     String? orderID;
     String? image;
 
-    title = message.data['title'];
-    body = message.data['body'];
+    title = message.data['title'] ?? message.notification?.title ?? AppConstants.appName;
+    body = message.data['body'] ?? message.data['description'] ?? message.notification?.body ?? '';
     orderID = jsonEncode(message.data);
     image = (message.data['image'] != null && message.data['image'].isNotEmpty)
         ? message.data['image'].startsWith('http')
@@ -158,10 +158,10 @@ class NotificationHelper {
           fln!,
         );
       } catch (e) {
-        await showBigTextNotification(title, body!, orderID, fln!);
+        await showBigTextNotification(title, body, orderID, fln!);
       }
     } else {
-      await showBigTextNotification(title, body!, orderID, fln!);
+      await showBigTextNotification(title, body, orderID, fln!);
     }
   }
 
@@ -174,9 +174,9 @@ class NotificationHelper {
     try {
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             playSound: true,
             importance: Importance.max,
@@ -192,9 +192,9 @@ class NotificationHelper {
         debugPrint('Error showing notification with custom sound, falling back: $e');
         const fallbackSpecifics = NotificationDetails(
           android: AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             playSound: true,
             importance: Importance.max,
@@ -223,9 +223,9 @@ class NotificationHelper {
       );
       AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             importance: Importance.max,
             styleInformation: bigTextStyleInformation,
@@ -242,9 +242,9 @@ class NotificationHelper {
         debugPrint('Error showing big text notification with custom sound, falling back: $e');
         final fallbackSpecifics = NotificationDetails(
           android: AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             importance: Importance.max,
             styleInformation: bigTextStyleInformation,
@@ -283,9 +283,9 @@ class NotificationHelper {
           );
       final AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             largeIcon: FilePathAndroidBitmap(largeIconPath),
             priority: Priority.max,
@@ -303,9 +303,9 @@ class NotificationHelper {
         debugPrint('Error showing big picture notification with custom sound, falling back: $e');
         final fallbackSpecifics = NotificationDetails(
           android: AndroidNotificationDetails(
-            AppConstants.appName,
-            AppConstants.appName,
-            channelDescription: AppConstants.appName,
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription: 'Notifications for order updates and assignments',
             icon: '@mipmap/launcher_icon',
             largeIcon: FilePathAndroidBitmap(largeIconPath),
             priority: Priority.max,
@@ -336,17 +336,21 @@ class NotificationHelper {
 
 @pragma('vm:entry-point')
 Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
-  debugPrint(
-    "=================onBackground: ${message.notification?.title ?? ''}/${message.notification!.body}/${message.notification!.titleLocKey}",
-  );
-  final NotificationBody payloadModel = NotificationBody.fromJson(message.data);
+  try {
+    debugPrint(
+      "=================onBackground: ${message.notification?.title ?? message.data['title'] ?? ''}/${message.notification?.body ?? message.data['body'] ?? message.data['description'] ?? ''}",
+    );
+    final NotificationBody payloadModel = NotificationBody.fromJson(message.data);
 
-  if (payloadModel.isAssignedNotification ?? false) {
-    FlutterForegroundTask.initCommunicationPort();
+    if (payloadModel.isAssignedNotification ?? false) {
+      FlutterForegroundTask.initCommunicationPort();
 
-    _initService();
+      _initService();
 
-    await _startService(payloadModel.orderId.toString());
+      await _startService(payloadModel.orderId?.toString() ?? '');
+    }
+  } catch (e) {
+    debugPrint("Error handling background message: $e");
   }
 }
 
